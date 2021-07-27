@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:tflite/tflite.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,8 +14,7 @@ class _HomeState extends State<Home> {
   XFile _image;
   List _prediction;
   String _label;
-  double _confidence;
-  double _other;
+  String _confidence;
 
   @override
   void initState() {
@@ -33,7 +33,9 @@ class _HomeState extends State<Home> {
       body: _loading
           ? Container(
               alignment: Alignment.center,
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF74749F)),
+              ),
             )
           : Container(
               child: Column(
@@ -47,8 +49,7 @@ class _HomeState extends State<Home> {
                           child: Image.file(File(_image.path))),
                   _prediction == null
                       ? Text('')
-                      : Text(
-                          "${_prediction[0]['label']}:${_prediction[0]['confidence'].toStringAsFixed(2)}%"),
+                      : Text('$_label with $_confidence% accuracy'),
                 ],
               ),
             ),
@@ -69,6 +70,7 @@ class _HomeState extends State<Home> {
   pickImage() async {
     var imagePicker =
         await ImagePicker().pickImage(source: ImageSource.gallery);
+
     if (imagePicker == null) return null;
 
     setState(() {
@@ -91,6 +93,19 @@ class _HomeState extends State<Home> {
     setState(() {
       _loading = false;
       _prediction = prediction;
+      _label = transform(_prediction[0]['label']);
+      _confidence = convert(_prediction[0]['confidence']);
     });
+  }
+
+  String transform(str) {
+    String label = str.replaceAll(RegExp(r'[0-9 | s]'), '');
+    label = label.toLowerCase();
+    return label;
+  }
+
+  String convert(value) {
+    double confidence = value * 100;
+    return confidence.toStringAsFixed(2);
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cats_and_dogs_classifier/screens/home-screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
