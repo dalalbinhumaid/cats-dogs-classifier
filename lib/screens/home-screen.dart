@@ -12,6 +12,9 @@ class _HomeState extends State<Home> {
   bool _loading;
   XFile _image;
   List _prediction;
+  String _label;
+  double _confidence;
+  double _other;
 
   @override
   void initState() {
@@ -27,9 +30,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Classiiififfier'),
-      ),
       body: _loading
           ? Container(
               alignment: Alignment.center,
