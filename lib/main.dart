@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cats_and_dogs_classifier/colors.dart';
 import 'package:cats_and_dogs_classifier/screens/home-screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +10,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Splash());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: Splash());
   }
 }
 
@@ -27,31 +26,40 @@ class _SplashState extends State<Splash> {
     Timer(Duration(seconds: 2), () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => Home()));
-    }
-    );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 200,
+      backgroundColor: ThemeColor.SECONDARY,
+      body: Stack(children: [
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.fill,
             ),
-            SizedBox(
-              height: 20,
-            ),
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF74749F)),
-            )
-          ],
+          ),
         ),
-      ),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/logo.png',
+                height: 300,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(ThemeColor.SECONDARY_LIGHT),
+              )
+            ],
+          ),
+        ),
+      ]),
     );
   }
 }

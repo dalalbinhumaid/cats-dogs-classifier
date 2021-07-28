@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cats_and_dogs_classifier/colors.dart';
 import 'package:cats_and_dogs_classifier/screens/view-image-screen.dart';
 import 'package:tflite/tflite.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,10 @@ class _HomeState extends State<Home> {
   String _label;
   String _confidence;
   TextStyle textStylePrimary = GoogleFonts.openSans(
-    textStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+    textStyle: TextStyle( color: ThemeColor.SECONDARY_LIGHT, fontSize: 18.0),
   );
   TextStyle textStyleSecondary = GoogleFonts.openSans(
-    textStyle: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF74749F)),
+    textStyle: TextStyle(fontWeight: FontWeight.bold, color: ThemeColor.SECONDARY,fontSize: 18.0),
   );
 
   @override
@@ -39,11 +40,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ThemeColor.PRIMARY_DARK,
       body: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 100.0,
-          horizontal: 40.0,
-        ),
+        padding: EdgeInsets.only(top: 150, left: 50, right: 50, bottom: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,11 +53,11 @@ class _HomeState extends State<Home> {
                 child: selectImage(),
               ),
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 50),
             selectText(),
-            SizedBox(height: 25),
+            SizedBox(height: 30),
             displayIcons(),
-            SizedBox(height: 25),
+            SizedBox(height: 30),
             viewImage(),
           ],
         ),
@@ -76,6 +75,21 @@ class _HomeState extends State<Home> {
   pickImage() async {
     var imagePicker =
         await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (imagePicker == null) return null;
+
+    setState(() {
+      _loading = true;
+      _imagePath = imagePicker;
+      _image = Image.file(File(imagePicker.path));
+    });
+
+    predict(imagePicker);
+  }
+
+  pickImageFromCamera() async {
+    var imagePicker =
+    await ImagePicker().pickImage(source: ImageSource.camera);
 
     if (imagePicker == null) return null;
 
@@ -137,6 +151,7 @@ class _HomeState extends State<Home> {
             TextSpan(text: 'gallery ', style: textStyleSecondary),
             TextSpan(text: 'or from your ', style: textStylePrimary),
             TextSpan(text: 'camera ', style: textStyleSecondary),
+            TextSpan(text: 'to get started!', style: textStylePrimary),
           ],
         ),
         textAlign: TextAlign.center,
@@ -174,7 +189,7 @@ class _HomeState extends State<Home> {
             splashColor: Color(0xFFCBCBCB),
             splashRadius: 40,
             icon: Icon(Icons.camera_alt_outlined),
-            onPressed: pickImage),
+            onPressed: pickImageFromCamera),
       ],
     );
   }
