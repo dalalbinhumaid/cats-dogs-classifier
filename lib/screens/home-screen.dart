@@ -176,20 +176,24 @@ class _HomeState extends State<Home> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-            color: Color(0xFF074749F),
-            splashColor: Color(0xFFCBCBCB),
+            color: ThemeColor.PRIMARY,
+            splashColor: ThemeColor.SECONDARY,
             splashRadius: 40,
+            iconSize: 36,
             icon: Icon(Icons.drive_folder_upload),
-            onPressed: pickImage),
+            onPressed: pickImage,
+        ),
         SizedBox(
           width: 25,
         ),
         IconButton(
-            color: Color(0xFF074749F),
-            splashColor: Color(0xFFCBCBCB),
+            color: ThemeColor.PRIMARY,
+            splashColor: ThemeColor.SECONDARY,
             splashRadius: 40,
-            icon: Icon(Icons.camera_alt_outlined),
-            onPressed: pickImageFromCamera),
+          iconSize: 36,
+          icon: Icon(Icons.camera_alt_outlined),
+            onPressed: pickImageFromCamera,
+        ),
       ],
     );
   }
@@ -202,10 +206,10 @@ class _HomeState extends State<Home> {
         width: MediaQuery.of(context).size.width * 0.6,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ViewImage(_imagePath)));
+            Navigator.push(context,  MaterialPageRoute(builder: (context) => ViewImage(_imagePath)));
           },
           style: ElevatedButton.styleFrom(
-            primary: Color(0xFF9E9EBC),
+            primary: ThemeColor.PRIMARY,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),

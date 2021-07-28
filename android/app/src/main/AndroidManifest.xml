@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cats_and_dogs_classifier">
    <application
-        android:label="cats_and_dogs_classifier"
+        android:label="Cats and Dogs Classifier"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

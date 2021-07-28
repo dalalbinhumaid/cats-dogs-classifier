@@ -35,6 +35,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   tflite: any
+  flutter_launcher_icons: ^0.9.1
+
+flutter_icons:
+  image_path: "assets/images/icon.png"
+  android: true
+  ios: true
+
 
 
 # For information on the generic Dart part of this file, see the
