@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:cats_and_dogs_classifier/screens/view-image-screen.dart';
 import 'package:tflite/tflite.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,10 +13,17 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _loading;
-  XFile _image;
+  Image _image;
+  XFile _imagePath;
   List _prediction;
   String _label;
   String _confidence;
+  TextStyle textStylePrimary = GoogleFonts.openSans(
+    textStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+  );
+  TextStyle textStyleSecondary = GoogleFonts.openSans(
+    textStyle: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF74749F)),
+  );
 
   @override
   void initState() {
@@ -30,32 +39,29 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _loading
-          ? Container(
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF74749F)),
-              ),
-            )
-          : Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _image == null
-                      ? Container()
-                      : Container(
-                          height: MediaQuery.of(context).size.width * 0.65,
-                          child: Image.file(File(_image.path))),
-                  _prediction == null
-                      ? Text('')
-                      : Text('$_label with $_confidence% accuracy'),
-                ],
+      body: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: 100.0,
+          horizontal: 40.0,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                height: 300.0,
+                child: selectImage(),
               ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: pickImage,
-        child: Icon(Icons.add),
+            SizedBox(height: 15),
+            selectText(),
+            SizedBox(height: 25),
+            displayIcons(),
+            SizedBox(height: 25),
+            viewImage(),
+          ],
+        ),
       ),
     );
   }
@@ -75,7 +81,8 @@ class _HomeState extends State<Home> {
 
     setState(() {
       _loading = true;
-      _image = imagePicker;
+      _imagePath = imagePicker;
+      _image = Image.file(File(imagePicker.path));
     });
 
     predict(imagePicker);
@@ -107,5 +114,102 @@ class _HomeState extends State<Home> {
   String convert(value) {
     double confidence = value * 100;
     return confidence.toStringAsFixed(2);
+  }
+
+  Image selectImage() {
+    if (!_loading) {
+      if (_label == 'dog') return Image.asset('assets/images/dog.png');
+      if (_label == 'cat')
+        return Image.asset('assets/images/cat.png');
+      else
+        return Image.asset('assets/images/upload.png');
+    } else
+      return Image.asset('assets/images/load.png');
+  }
+
+  RichText selectText() {
+    if (_prediction == null)
+      return RichText(
+        text: TextSpan(
+          text: 'Upload an image from your ',
+          style: textStylePrimary,
+          children: [
+            TextSpan(text: 'gallery ', style: textStyleSecondary),
+            TextSpan(text: 'or from your ', style: textStylePrimary),
+            TextSpan(text: 'camera ', style: textStyleSecondary),
+          ],
+        ),
+        textAlign: TextAlign.center,
+      );
+    else
+      return RichText(
+        text: TextSpan(
+          text: 'Your image is a ',
+          style: textStylePrimary,
+          children: [
+            TextSpan(text: _label, style: textStyleSecondary),
+            TextSpan(text: ' with an accuracy of ', style: textStylePrimary),
+            TextSpan(text: '$_confidence%', style: textStyleSecondary),
+          ],
+        ),
+        textAlign: TextAlign.center,
+      );
+  }
+
+  Row displayIcons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+            color: Color(0xFF074749F),
+            splashColor: Color(0xFFCBCBCB),
+            splashRadius: 40,
+            icon: Icon(Icons.drive_folder_upload),
+            onPressed: pickImage),
+        SizedBox(
+          width: 25,
+        ),
+        IconButton(
+            color: Color(0xFF074749F),
+            splashColor: Color(0xFFCBCBCB),
+            splashRadius: 40,
+            icon: Icon(Icons.camera_alt_outlined),
+            onPressed: pickImage),
+      ],
+    );
+  }
+
+  viewImage() {
+      if (_image == null)
+        return Container();
+      else
+        return Container(
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ViewImage(_imagePath)));
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFF9E9EBC),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            elevation: 0.0,
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'View Image',
+                    style: GoogleFonts.openSans(
+                        fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  Icon(Icons.arrow_forward_rounded)
+                ]),
+          ),
+        ),
+      );
   }
 }
