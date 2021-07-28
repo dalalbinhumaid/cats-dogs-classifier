@@ -10,6 +10,7 @@ A binary image classifier that uses google's techable machine. the model will at
 <p align="center">
   <img height="700" src="https://github.com/dalalbinhumaid/cats-dogs-classifier/blob/main/assets/screenshots/1.png" />
   <img height="700" src="https://github.com/dalalbinhumaid/cats-dogs-classifier/blob/main/assets/screenshots/2.png" />
+  <br>
   <img height="700" src="https://github.com/dalalbinhumaid/cats-dogs-classifier/blob/main/assets/screenshots/3.png" />
   <img height="700" src="https://github.com/dalalbinhumaid/cats-dogs-classifier/blob/main/assets/screenshots/4.png" />
 </p>
